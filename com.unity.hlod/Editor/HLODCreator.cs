@@ -200,7 +200,7 @@ namespace Unity.HLODSystem
                 }
                 List<SpaceNode> rootNodeList = spliter.CreateSpaceTree(bounds, hlod.ChunkSize, hlod.transform, hlodTargets, progress =>
                 {
-                    EditorUtility.DisplayProgressBar("Bake HLOD", "Splitting space", progress * 0.25f);
+                    EditorUtility.DisplayProgressBar("Bake HLOD", "Splitting space", progress * 0.20f);
                 });
 
                 if (hlodTargets.Count == 0)
@@ -218,6 +218,13 @@ namespace Unity.HLODSystem
                         "Ok");
                     yield break;
                 }
+
+                IBatcher batcher = (IBatcher)Activator.CreateInstance(hlod.BatcherType, new object[] { hlod.BatcherOptions });
+                batcher.PreProcess(hlod.transform, progress =>
+                {
+                    EditorUtility.DisplayProgressBar("Bake HLOD", "Storing results.",
+                        0.20f + progress * 0.05f);
+                });
 
                 for ( int ri = 0; ri < rootNodeList.Count; ++ ri)
                 {
@@ -252,18 +259,12 @@ namespace Unity.HLODSystem
                         sw.Reset();
                         sw.Start();
 
-
-                        using (IBatcher batcher =
-                               (IBatcher)Activator.CreateInstance(hlod.BatcherType,
-                                   new object[] { hlod.BatcherOptions }))
-                        {
-                            batcher.Batch(hlod.transform, buildInfos,
-                                progress =>
-                                {
-                                    EditorUtility.DisplayProgressBar("Bake HLOD", "Generating combined static meshes.",
-                                        0.5f + progress * 0.25f);
-                                });
-                        }
+                        batcher.Batch(hlod.transform, buildInfos,
+                            progress =>
+                            {
+                                EditorUtility.DisplayProgressBar("Bake HLOD", "Generating combined static meshes.",
+                                    0.5f + progress * 0.25f);
+                            });
 
                         Debug.Log("[HLOD] Batch: " + sw.Elapsed.ToString("g"));
                         sw.Reset();
@@ -296,7 +297,9 @@ namespace Unity.HLODSystem
                         sw.Start();
                     }
                 }
-                
+
+                batcher.Dispose();
+
                 UserDataSerialization(hlod);
                 EditorUtility.SetDirty(hlod);
                 EditorUtility.SetDirty(hlod.gameObject);
