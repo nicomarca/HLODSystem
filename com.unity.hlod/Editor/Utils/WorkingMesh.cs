@@ -37,6 +37,7 @@ namespace Unity.HLODSystem.Utils
             for (int i = 0; i < mesh.subMeshCount; i++)
             {
                 wm.SetTriangles(mesh.GetTriangles(i), i);
+                wm.SetIndexCount(i, mesh.GetIndexCount(i));
             }
             wm.name = mesh.name;
             wm.bounds = mesh.bounds;
@@ -342,6 +343,17 @@ namespace Unity.HLODSystem.Utils
                 }
             }
         }
+
+        NativeArray<uint> _indexCounts;
+        public uint GetIndexCount(int subMeshIndex)
+        {
+            return _indexCounts[subMeshIndex];
+        }
+        internal void SetIndexCount(int i, uint v)
+        {
+            _indexCounts[i] = v;
+        }
+
         NativeArray<int> m_SubmeshOffset;
 
         int submeshOffsetCount
@@ -475,6 +487,7 @@ namespace Unity.HLODSystem.Utils
             m_Name = new NativeArray<byte>(k_MaxNameSize, allocator);
             m_SubmeshOffset = new NativeArray<int>(maxSubmeshes, allocator);
             m_Triangles = new NativeArray<int>(maxTriangles, allocator);
+            _indexCounts = new NativeArray<uint>(maxSubmeshes, allocator);
         }
 
         public void Dispose()
@@ -520,6 +533,9 @@ namespace Unity.HLODSystem.Utils
 
             if (m_Triangles.IsCreated)
                 m_Triangles.Dispose();
+
+            if (_indexCounts.IsCreated)
+                _indexCounts.Dispose();
 
             m_detector.Dispose();
         }
