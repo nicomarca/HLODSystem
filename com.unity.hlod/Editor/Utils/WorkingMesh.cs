@@ -320,6 +320,27 @@ namespace Unity.HLODSystem.Utils
         }
         NativeArray<Matrix4x4> m_Bindposes;
 
+        public void SetUVs(int uvChannel, Vector2[] uvsj)
+        {
+            switch (uvChannel)
+            {
+                case 0:
+                    uv = uvsj;
+                    break;
+                case 1:
+                    uv2 = uvsj;
+                    break;
+                case 2:
+                    uv3 = uvsj;
+                    break;
+                case 3:
+                    uv4 = uvsj;
+                    break;
+                default:
+                    throw new Exception("Trying to access unavailable workingmesh UVs!");
+            }
+        }
+
         int bindposesCount
         {
             get { return m_Counts[(int)Channel.Bindposes]; }
