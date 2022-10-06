@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.HLODSystem.Utils;
@@ -24,6 +24,10 @@ namespace Unity.HLODSystem
         }
 
         public void Dispose()
+        {
+        }
+
+        public void PreProcess(Transform rootTransform, Action<float> onProgress)
         {
         }
 

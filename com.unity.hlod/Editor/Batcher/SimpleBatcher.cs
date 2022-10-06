@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
@@ -44,6 +44,10 @@ namespace Unity.HLODSystem
         public void Dispose()
         {
             m_createdMaterials.Dispose();
+        }
+
+        public void PreProcess(Transform rootTransform, Action<float> onProgress)
+        {
         }
 
         public void Batch(Transform rootTransform, DisposableList<HLODBuildInfo> targets, Action<float> onProgress)
