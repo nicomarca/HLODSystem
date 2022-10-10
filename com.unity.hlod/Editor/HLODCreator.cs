@@ -176,10 +176,12 @@ namespace Unity.HLODSystem
             try
             {
                 Stopwatch sw = new Stopwatch();
+                TimeSpan totalTime = new TimeSpan();
 
                 AssetDatabase.Refresh();
                 AssetDatabase.SaveAssets();
 
+                totalTime = totalTime + sw.Elapsed;
                 sw.Reset();
                 sw.Start();
                 
@@ -239,7 +241,9 @@ namespace Unity.HLODSystem
                         }
 
 
-                        Debug.Log("[HLOD] Splite space: " + sw.Elapsed.ToString("g"));
+                        Debug.Log("[HLOD] Splite space: " + sw.Elapsed.ToString("hh':'mm':'ss':'fff"));
+
+                        totalTime = totalTime + sw.Elapsed;
                         sw.Reset();
                         sw.Start();
 
@@ -255,7 +259,9 @@ namespace Unity.HLODSystem
                             EditorUtility.DisplayProgressBar("Bake HLOD", "Simplify meshes",
                                 0.25f + progress * 0.25f);
                         });
-                        Debug.Log("[HLOD] Simplify: " + sw.Elapsed.ToString("g"));
+                        Debug.Log("[HLOD] Simplify: " + sw.Elapsed.ToString("hh':'mm':'ss':'fff"));
+
+                        totalTime = totalTime + sw.Elapsed;
                         sw.Reset();
                         sw.Start();
 
@@ -266,7 +272,9 @@ namespace Unity.HLODSystem
                                     0.5f + progress * 0.25f);
                             });
 
-                        Debug.Log("[HLOD] Batch: " + sw.Elapsed.ToString("g"));
+                        Debug.Log("[HLOD] Batch: " + sw.Elapsed.ToString("hh':'mm':'ss':'fff"));
+
+                        totalTime = totalTime + sw.Elapsed;
                         sw.Reset();
                         sw.Start();
 
@@ -292,7 +300,10 @@ namespace Unity.HLODSystem
                                 EditorUtility.DisplayProgressBar("Bake HLOD", "Storing results.",
                                     0.75f + progress * 0.25f);
                             });
-                        Debug.Log("[HLOD] Build: " + sw.Elapsed.ToString("g"));
+                        Debug.Log("[HLOD] Build: " + sw.Elapsed.ToString("hh':'mm':'ss':'fff"));
+
+                        totalTime = totalTime + sw.Elapsed;
+                        Debug.Log("Total time elapsed: " + totalTime.ToString("hh':'mm':'ss':'fff"));
                         sw.Reset();
                         sw.Start();
                     }
