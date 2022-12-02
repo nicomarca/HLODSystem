@@ -296,8 +296,9 @@ namespace Unity.HLODSystem.SpaceManager
         private float CalcLooseSize(float chunkSize)
         {
             //If the chunk size is small, there is a problem that it may get caught in an infinite loop.
-            //So, the size can be determined according to the chunk size.
-            return Mathf.Min(chunkSize * 0.3f, m_looseSizeFromOptions);
+            //So, the minimum acceptable loose size can be determined according to the chunk size.
+            //If users wants to have a greater looseSize, he can.
+            return Mathf.Max(chunkSize * 0.3f, m_looseSizeFromOptions);
             
         }
 
