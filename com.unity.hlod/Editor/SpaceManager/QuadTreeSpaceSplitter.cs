@@ -297,7 +297,7 @@ namespace Unity.HLODSystem.SpaceManager
         {
             //If the chunk size is small, there is a problem that it may get caught in an infinite loop.
             //So, the minimum acceptable loose size can be determined according to the chunk size.
-            //If users wants to have a greater looseSize, he can.
+            //If users want to have a greater looseSize, they can.
             return Mathf.Max(chunkSize * 0.3f, m_looseSizeFromOptions);
             
         }
